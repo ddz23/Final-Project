@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>List Character</title>
+        <link rel="stylesheet" href="assets/css/materialize.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">        
+        <link rel="stylesheet" href="../main.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <!-- <script src="data.js"></script> -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.0/axios.js"></script>
+        <style>
+            body { margin:100px 50px 50px 50px; }
+            #content { border: 1px solid #eeeeee; padding: 30px; border-radius: 8px; margin-bottom:10px}
+        </style>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="#">My Own Website</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="../index.html">Home <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../about/index.html">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../kalkulator/index.html">Calculator</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">List Item</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="columns is-centered is-vcentered">
+            <div id="content" class="column is-three-quarters">
+                <h2 class="subtitle"><b>New Planet Star Wars</b></h2>
+                <hr />
+                <div class="field">
+                    <p class="control">
+                        <input class="input is-primary" id="planet" type="text" placeholder="Search ur character starwars...">
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="columns">
+            <div id="content" class="column is-three-quarters">
+                <table id="table" class="highlight centered">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Rotation Period</th>
+                            <th>Orbital Period</th>
+                            <th>Diameter</th>
+                            <th>Climate</th>
+                            <th>Gravity</th>
+                            <th>Terrain</th>
+                            <th>Surface Water</th>
+                            <th>Population</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabel">
+
+                    </tbody>
+                </table>
+                <script>
+                    var apiSwapi = "https://swapi.co/api/planets/";
+
+                    function getData() {
+                        return axios.get(apiSwapi)
+                            .then(response => {
+                                return response.data;
+                                console.log('Data ditemukan');
+                            })
+                            .catch(function (error) {
+                                console.log('Data tidak ditemukan');
+                            })
+                    }
+
+                    $(document).ready(function () {
+                        $("#planet").on("keyup", function () {
+                            var value = $(this).val().toLowerCase();
+                            $("#tabel tr").filter(function () {
+                                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                            });
+                        });
+                    });
+
+                    getData().then(data => {
+                        data.results.forEach(li => {
+                            document.querySelector('#tabel').insertAdjacentHTML('beforeend',
+                                '<td>' + li.name + '</td>' +
+                                '<td>' + li.rotation_period + '</td>' +
+                                '<td>' + li.orbital_period + '</td>' +
+                                '<td>' + li.diameter + '</td>' +
+                                '<td>' + li.climate + '</td>' +
+                                '<td>' + li.gravity + '</td>' +
+                                '<td>' + li.terrain + '</td>' +
+                                '<td>' + li.surface_water + '</td>' +
+                                '<td>' + li.population + '</td>')
+                        });
+                    })
+                </script>
+            </div>
+        </div>
+    </body>
+</html>
